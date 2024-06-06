@@ -108,4 +108,5 @@ compatibility_flags = ["nodejs_compat"]
 # index_name = "my-index"
 
 [vars]
-API_KEY = ""
+SHEET_ID = ""
+GOOGLE_AUTH = ""
