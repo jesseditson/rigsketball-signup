@@ -1,10 +1,9 @@
-import { AutoRouter, error, json, withContent } from "itty-router";
+import { AutoRouter, error, withContent } from "itty-router";
 import { getToken, googleAPI } from "./google";
 
 const router = AutoRouter({
 	before: [withContent],
 	catch: error,
-	finally: [json],
 });
 
 export type SignupBody = {

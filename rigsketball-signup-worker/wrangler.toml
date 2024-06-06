@@ -110,3 +110,7 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 SHEET_ID = ""
 GOOGLE_AUTH = ""
+DEV = false
+
+[env.dev.vars]
+DEV = true
