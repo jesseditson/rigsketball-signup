@@ -1,7 +1,7 @@
-import { AutoRouter, error, withContent } from "itty-router";
+import { Router, error, withContent } from "itty-router";
 import { getToken, googleAPI } from "./google";
 
-const router = AutoRouter({
+const router = Router({
 	before: [withContent],
 	catch: error,
 });
@@ -22,11 +22,7 @@ export type Round = {
 };
 
 export type StateResponse = {
-	rounds: {
-		1: Round[];
-		2: Round[];
-		3: Round[];
-	};
+	rounds: Round[];
 };
 
 // router.post('/signup', async (request, env: Env) => {
@@ -70,7 +66,6 @@ router.get("/state", async (request, env: Env) => {
 		roundsMap.set(round[0], round[1]);
 		roundsMap.set(round[1], round[2]);
 	});
-	console.log(roundsMap);
 	const scores = (await google(
 		"GET",
 		"values/Scores!A2:C22?majorDimension=ROWS"
@@ -97,32 +92,14 @@ router.get("/state", async (request, env: Env) => {
 	};
 
 	const state: StateResponse = {
-		rounds: {
-			1: scores.values.slice(0, 12).map((rows) => {
-				return {
-					...parseDate(rows[0]),
-					band1: rows[1] || null,
-					band2: rows[2] || null,
-					next: next(rows[0]),
-				};
-			}),
-			2: scores.values.slice(12, 6).map((rows) => {
-				return {
-					...parseDate(rows[0]),
-					band1: rows[1] || null,
-					band2: rows[2] || null,
-					next: next(rows[0]),
-				};
-			}),
-			3: scores.values.slice(18, 3).map((rows) => {
-				return {
-					...parseDate(rows[0]),
-					band1: rows[1] || null,
-					band2: rows[2] || null,
-					next: next(rows[0]),
-				};
-			}),
-		},
+		rounds: scores.values.slice(0, 12).map((rows) => {
+			return {
+				...parseDate(rows[0]),
+				band1: rows[1] || null,
+				band2: rows[2] || null,
+				next: next(rows[0]),
+			};
+		}),
 	};
 
 	return state;

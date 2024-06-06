@@ -1,6 +1,6 @@
 import { handleCors } from "./cors";
 import { json } from "itty-router";
-import apiRouter from "./router";
+import apiRouter from "./api";
 
 export default {
 	async fetch(

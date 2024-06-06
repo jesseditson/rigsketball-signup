@@ -1,6 +1,10 @@
 {% layout 'theme' title: "Rigsketball Signup" %}
 
-<div class="flex flex-col max-w-screen-md gap-6 justify-center bg-yellow text-blue p-10 ring-2 ring-red">
+<div class="relative flex flex-col max-w-screen-md gap-6 justify-center bg-yellow text-blue p-10 ring-2 ring-red">
+  <div id="loader" class="absolute size-full top-0 left-0 transition-opacity flex justify-center opacity-0 pointer-events-none">
+    <h1 class="absolute top-20 z-10 text-yellow text-2xl bold">Get Ready for Fun...</h1>
+    <canvas class="absolute size-full top-0"></canvas>
+  </div>
   <h1 class="text-3xl font-bold">
     Rigsketball 2024 Signup
   </h1>
@@ -19,29 +23,31 @@
       placeholder="hello@rigsketball.com" />
     <h2 class="bg-blue text-white flex items-center justify-center text-2xl col-span-3">FIRST ROUND DATE AND TIME</h2>
     <div id="dates" class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
-      <button data-date="8/8/2024" class="bg-red text-white rounded-xl px-5 py-2">August 8th</button>
-      <button data-date="8/9/2024" class="rounded-xl px-5 py-2">August 9th</button>
+      <button data-date="Aug 8" class="bg-red text-white rounded-xl px-5 py-2">Aug 8th</button>
+      <button data-date="Aug 9" class="rounded-xl px-5 py-2">Aug 9th</button>
     </div>
     <div id="times" class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
-      <button data-time="15:40:00" class="bg-red text-white rounded-xl px-5 py-2">3:40 PM</button>
-      <button data-time="16:20:00" class="rounded-xl px-5 py-2">4:20 PM</button>
-      <button data-time="17:00:00" class="rounded-xl px-5 py-2">5:00 PM</button>
-      <button data-time="17:40:00" class="rounded-xl px-5 py-2">5:40 PM</button>
-      <button data-time="18:20:00" class="rounded-xl px-5 py-2">6:20 PM</button>
-      <button data-time="19:00:00" class="rounded-xl px-5 py-2">7:00 PM</button>
+      <button data-time="3:40 PM" class="bg-red text-white rounded-xl px-5 py-2">3:40 PM</button>
+      <button data-time="4:20 PM" class="rounded-xl px-5 py-2">4:20 PM</button>
+      <button data-time="5:00 PM" class="rounded-xl px-5 py-2">5:00 PM</button>
+      <button data-time="5:40 PM" class="rounded-xl px-5 py-2">5:40 PM</button>
+      <button data-time="6:20 PM" class="rounded-xl px-5 py-2">6:20 PM</button>
+      <button data-time="7:00 PM" class="rounded-xl px-5 py-2">7:00 PM</button>
     </div>
     <h2 class="bg-blue text-white flex items-center justify-center text-2xl col-span-3">SECOND ROUND DATE AND TIME</h2>
     <div class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
-      <span id="second-round" class="rounded-xl px-5 py-2">August 10th
+      <span id="second-round" class="rounded-xl px-5 py-2">Aug 10th
         <span id="second-round-time">3:40 PM</span>
       </span>
     </div>
     <h2 class="bg-blue text-white flex items-center justify-center text-2xl col-span-3">THIRD ROUND DATE AND TIME</h2>
     <div class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
-      <span id="second-round" class="rounded-xl px-5 py-2">August 11th
-        <span id="second-round-time">4:20 PM</span>
+      <span id="third-round" class="rounded-xl px-5 py-2">Aug 11th
+        <span id="third-round-time">4:20 PM</span>
       </span>
     </div>
-    <button class="bg-red text-white flex items-center justify-center text-2xl col-span-3 p-8 rounded-xl hover:shadow-2xl active:shadow-none">LOOKS GREAT SIGN ME UP</button>
+    <div id="error" class="text-2xl text-red col-span-3 hidden"></div>
+    <div id="success" class="text-2xl text-red col-span-3 hidden"></div>
+    <button id="signup" class="disabled opacity-10 bg-red text-white flex items-center justify-center text-2xl col-span-3 p-8 rounded-xl hover:shadow-2xl active:shadow-none">LOOKS GREAT SIGN ME UP</button>
   </div>
 </div>
