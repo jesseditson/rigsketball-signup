@@ -1,12 +1,47 @@
-{% layout 'theme' title: "Website" %}
+{% layout 'theme' title: "Rigsketball Signup" %}
 
-<h1 class="text-3xl font-bold underline">
-    A Website Testing
-</h1>
-
-<div class="content">
-    {% for section in objects.section %}
-        <h2>{{section.name}}</h2>
-        <div>{{section.body}}</div>
-    {% endfor %}
+<div class="flex flex-col max-w-screen-md gap-6 justify-center bg-yellow text-blue p-10 ring-2 ring-red">
+  <h1 class="text-3xl font-bold">
+    Rigsketball 2024 Signup
+  </h1>
+  <div class="grid grid-cols-3 gap-6">
+    <h2 class="flex items-center justify-end text-2xl">BAND NAME</h2>
+    <input
+      id="name"
+      type="text"
+      class="p-2 text-2xl col-span-2 ring-2 ring-red"
+      placeholder="Disturbed Earth" />
+    <h2 class="flex items-center justify-end text-2xl">EMAIL ADDRESS</h2>
+    <input
+      id="email"
+      type="email"
+      class="p-2 text-2xl col-span-2 ring-2 ring-red"
+      placeholder="hello@rigsketball.com" />
+    <h2 class="bg-blue text-white flex items-center justify-center text-2xl col-span-3">FIRST ROUND DATE AND TIME</h2>
+    <div id="dates" class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <button data-date="8/8/2024" class="bg-red text-white rounded-xl px-5 py-2">August 8th</button>
+      <button data-date="8/9/2024" class="rounded-xl px-5 py-2">August 9th</button>
+    </div>
+    <div id="times" class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <button data-time="15:40:00" class="bg-red text-white rounded-xl px-5 py-2">3:40 PM</button>
+      <button data-time="16:20:00" class="rounded-xl px-5 py-2">4:20 PM</button>
+      <button data-time="17:00:00" class="rounded-xl px-5 py-2">5:00 PM</button>
+      <button data-time="17:40:00" class="rounded-xl px-5 py-2">5:40 PM</button>
+      <button data-time="18:20:00" class="rounded-xl px-5 py-2">6:20 PM</button>
+      <button data-time="19:00:00" class="rounded-xl px-5 py-2">7:00 PM</button>
+    </div>
+    <h2 class="bg-blue text-white flex items-center justify-center text-2xl col-span-3">SECOND ROUND DATE AND TIME</h2>
+    <div class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <span id="second-round" class="rounded-xl px-5 py-2">August 10th
+        <span id="second-round-time">3:40 PM</span>
+      </span>
+    </div>
+    <h2 class="bg-blue text-white flex items-center justify-center text-2xl col-span-3">THIRD ROUND DATE AND TIME</h2>
+    <div class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <span id="second-round" class="rounded-xl px-5 py-2">August 11th
+        <span id="second-round-time">4:20 PM</span>
+      </span>
+    </div>
+    <button class="bg-red text-white flex items-center justify-center text-2xl col-span-3 p-8 rounded-xl hover:shadow-2xl active:shadow-none">LOOKS GREAT SIGN ME UP</button>
+  </div>
 </div>
