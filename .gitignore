@@ -11,3 +11,7 @@ bin/tmp
 # npm/node
 node_modules
 npm-debug.log*
+
+
+# experiments
+gen-creds
