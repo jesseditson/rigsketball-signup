@@ -1,5 +1,5 @@
 import { handleCors } from "./cors";
-import { json } from "itty-router";
+import { error, json } from "itty-router";
 import apiRouter from "./api";
 
 export default {
@@ -13,13 +13,24 @@ export default {
 			return headers;
 		}
 		console.log(`[${request.method}] ${request.url}`);
-		return apiRouter.fetch(request, env, headers).then((r) => {
-			return new Response(JSON.stringify(r), {
-				headers: {
-					"Content-Type": "application/json",
-					...headers,
-				},
+		return apiRouter
+			.fetch(request, env, headers)
+			.then((r) => {
+				return new Response(JSON.stringify(r), {
+					headers: {
+						"Content-Type": "application/json",
+						...headers,
+					},
+				});
+			})
+			.catch((e) => {
+				return new Response(e, {
+					headers: {
+						"Content-Type": "text/plain",
+						...headers,
+					},
+					status: 500,
+				});
 			});
-		});
 	},
 };

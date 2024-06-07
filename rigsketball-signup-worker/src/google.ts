@@ -99,7 +99,7 @@ export const getToken = async (serviceAccountJSON: string) => {
 
 export const googleAPI =
 	(token: string, baseURL: string) =>
-	async (method: "GET" | "POST", endpoint: string, body?: Object) => {
+	async (method: "GET" | "POST" | "PUT", endpoint: string, body?: Object) => {
 		const res = await fetch(`${baseURL}/${endpoint}`, {
 			method,
 			headers: {

@@ -3,7 +3,6 @@ import { getToken, googleAPI } from "./google";
 
 const router = Router({
 	before: [withContent],
-	catch: error,
 });
 
 export type SignupBody = {
@@ -25,14 +24,96 @@ export type StateResponse = {
 	rounds: Round[];
 };
 
-// router.post('/signup', async (request, env: Env) => {
-// 	if (!env.GOOGLE_AUTH) {
-// 		throw new Error('Invalid env');
-// 	}
-
-// 	// const vals = await getValues('1T__CpRQWSsFfL9Es5noZeq-7K3q8-uuo2XwF6s_IakA', 'Scores!A2:C22', env.GOOGLE_AUTH);
-// 	// return vals;
-// });
+router.post("/signup", async (request, env: Env) => {
+	if (!env.GOOGLE_AUTH) {
+		throw new Error("Invalid env");
+	}
+	const signup = (await request.json()) as SignupBody;
+	if (!signup.name || !signup.email || !signup.date || !signup.time) {
+		throw new Error("Invalid body");
+	}
+	const google = googleAPI(
+		await getToken(env.GOOGLE_AUTH),
+		`https://sheets.googleapis.com/v4/spreadsheets/${env.SHEET_ID}`
+	);
+	const scores = (await google(
+		"GET",
+		"values/Scores!A2:C22?majorDimension=ROWS"
+	)) as {
+		range: string;
+		values: string[][];
+	};
+	const bands = (await google(
+		"GET",
+		"values/Bands!A:B?majorDimension=ROWS"
+	)) as {
+		range: string;
+		values: string[][];
+	};
+	const desiredDateIdx = scores.values.findIndex((s) => {
+		return s[0] == `${signup.date} ${signup.time}`;
+	});
+	console.log("FOUND", desiredDateIdx);
+	if (desiredDateIdx === -1) {
+		throw new Error("Invalid date");
+	}
+	let writeCell = `B${desiredDateIdx + 2}`;
+	const desiredDate = scores.values[desiredDateIdx];
+	if (desiredDate[1]) {
+		writeCell = `C${desiredDateIdx + 2}`;
+	}
+	if (desiredDate[1] && desiredDate[2]) {
+		throw new Error("Sorry, this slot is no longer available.");
+	}
+	let bandName = signup.name.toLowerCase();
+	const existingBandIdx = bands.values.findIndex((r) => {
+		if (
+			r[0]?.toLowerCase() === signup.name.toLowerCase() ||
+			r[1]?.toLowerCase() === signup.email.toLowerCase()
+		) {
+			bandName = r[0].toLowerCase();
+			return true;
+		}
+		return false;
+	});
+	if (existingBandIdx === -1) {
+		const nextBandIndex = bands.values.length + 1;
+		console.log("ADDING", signup.name, signup.email, nextBandIndex);
+		const bandRange = `Bands!A${nextBandIndex}:B${nextBandIndex}`;
+		await google("PUT", `values/${bandRange}?valueInputOption=USER_ENTERED`, {
+			range: bandRange,
+			values: [[signup.name, signup.email]],
+		});
+	} else {
+		console.log(`EXISTS: ${signup.name} (${signup.email})`);
+	}
+	const existingCells: string[] = [];
+	scores.values.forEach((s, index) => {
+		if (s[1]?.toLowerCase() == bandName) {
+			existingCells.push("B" + (2 + index));
+		}
+		if (s[2]?.toLowerCase() == bandName) {
+			existingCells.push("C" + (2 + index));
+		}
+	});
+	if (existingCells.length) {
+		console.log("CLEARING", existingCells);
+		await Promise.all(
+			existingCells.map(async (cell) => {
+				return await google("POST", `values/Scores!${cell}:clear`);
+			})
+		);
+	}
+	console.log("CLAIMING", writeCell);
+	return await google(
+		"PUT",
+		`values/Scores!${writeCell}?valueInputOption=USER_ENTERED`,
+		{
+			range: `Scores!${writeCell}`,
+			values: [[signup.name]],
+		}
+	);
+});
 
 const dateRE = /^(\w+ \d+) (.+)$/;
 const parseDate = (d: string) => {

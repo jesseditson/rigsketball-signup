@@ -172,7 +172,7 @@ window.addEventListener("load", async () => {
         );
       }
     } catch (e) {
-      showError((e as Error)?.toString());
+      showError(`SIGNUP FAILED: ${(e as Error)?.toString()}`);
     }
   });
   showLoading(loader, false);
