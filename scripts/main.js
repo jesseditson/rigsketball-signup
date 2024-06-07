@@ -19499,7 +19499,7 @@ void main() {
 
 // src/index.ts
 var getState = async () => {
-  const res = await fetch("https://production.rigsketball-signup-worker.jesse-694.workers.dev/state");
+  const res = await fetch("https://rigsketball-signup-worker.jesse-694.workers.dev/state");
   return await res.json();
 };
 window.addEventListener("load", async () => {
@@ -19649,7 +19649,7 @@ window.addEventListener("load", async () => {
       time: selectedTime.dataset.time
     };
     try {
-      const r = await fetch("https://production.rigsketball-signup-worker.jesse-694.workers.dev/signup", {
+      const r = await fetch("https://rigsketball-signup-worker.jesse-694.workers.dev/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(signup)
