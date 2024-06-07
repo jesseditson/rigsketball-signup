@@ -19509,6 +19509,7 @@ window.addEventListener("load", async () => {
   renderLoading(loader.querySelector("canvas"));
   const nameField = document.getElementById("name");
   const emailField = document.getElementById("email");
+  const phoneField = document.getElementById("phone");
   const datesContainer = document.getElementById("dates");
   const timesContainer = document.getElementById("times");
   const signupButton = document.getElementById("signup");
@@ -19527,15 +19528,24 @@ window.addEventListener("load", async () => {
     "[data-time]"
   );
   const state = await getState();
+  const phoneNumber = () => {
+    const entered = phoneField.value;
+    const n = parseInt(entered.replace(/[^\d]+/g, ""), 10).toString();
+    if (n.length >= 10) {
+      return n;
+    }
+    return void 0;
+  };
   const canSubmit = () => {
     const name = nameField.value;
     const email = emailField.value;
-    return name && email;
+    return name && email && phoneNumber();
   };
   const setSubmitted = (s) => {
     submitted = s;
     nameField.toggleAttribute("disabled", submitted);
     emailField.toggleAttribute("disabled", submitted);
+    phoneField.toggleAttribute("disabled", submitted);
   };
   const showError = (e) => {
     error.innerText = e;
@@ -19601,6 +19611,13 @@ window.addEventListener("load", async () => {
     emailField.classList.toggle("ring-2", !emailField.value);
     update();
   });
+  phoneField.addEventListener("input", () => {
+    if (submitted) {
+      return;
+    }
+    phoneField.classList.toggle("ring-2", !phoneField.value);
+    update();
+  });
   datesContainer.addEventListener("click", (ev) => {
     if (submitted) {
       return;
@@ -19645,6 +19662,7 @@ window.addEventListener("load", async () => {
     const signup = {
       name: nameField.value,
       email: emailField.value,
+      phone: phoneNumber(),
       date: selectedDate.dataset.date,
       time: selectedTime.dataset.time
     };
