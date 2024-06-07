@@ -1,7 +1,6 @@
 import type {
   StateResponse,
   SignupBody,
-  Round,
 } from "../rigsketball-signup-worker/src/api";
 import { renderLoading, showLoading } from "./loading";
 
@@ -17,6 +16,7 @@ window.addEventListener("load", async () => {
   renderLoading(loader.querySelector("canvas") as HTMLCanvasElement);
   const nameField = document.getElementById("name") as HTMLInputElement;
   const emailField = document.getElementById("email") as HTMLInputElement;
+  const phoneField = document.getElementById("phone") as HTMLInputElement;
   const datesContainer = document.getElementById("dates") as HTMLDivElement;
   const timesContainer = document.getElementById("times") as HTMLDivElement;
   const signupButton = document.getElementById("signup") as HTMLButtonElement;
@@ -37,15 +37,25 @@ window.addEventListener("load", async () => {
 
   const state = await getState();
 
+  const phoneNumber = () => {
+    const entered = phoneField.value;
+    const n = parseInt(entered.replace(/[^\d]+/g, ""), 10).toString();
+    if (n.length >= 10) {
+      return n;
+    }
+    return undefined;
+  };
+
   const canSubmit = () => {
     const name = nameField.value;
     const email = emailField.value;
-    return name && email;
+    return name && email && phoneNumber();
   };
   const setSubmitted = (s: boolean) => {
     submitted = s;
     nameField.toggleAttribute("disabled", submitted);
     emailField.toggleAttribute("disabled", submitted);
+    phoneField.toggleAttribute("disabled", submitted);
   };
 
   const showError = (e: string) => {
@@ -119,6 +129,13 @@ window.addEventListener("load", async () => {
     emailField.classList.toggle("ring-2", !emailField.value);
     update();
   });
+  phoneField.addEventListener("input", () => {
+    if (submitted) {
+      return;
+    }
+    phoneField.classList.toggle("ring-2", !phoneField.value);
+    update();
+  });
 
   datesContainer.addEventListener("click", (ev) => {
     if (submitted) {
@@ -164,6 +181,7 @@ window.addEventListener("load", async () => {
     const signup: SignupBody = {
       name: nameField.value,
       email: emailField.value,
+      phone: phoneNumber()!,
       date: selectedDate.dataset.date!,
       time: selectedTime.dataset.time!,
     };

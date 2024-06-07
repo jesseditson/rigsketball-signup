@@ -8,6 +8,7 @@ const router = Router({
 export type SignupBody = {
 	name: string;
 	email: string;
+	phone: string;
 	date: string;
 	time: string;
 };
@@ -79,10 +80,10 @@ router.post("/signup", async (request, env: Env) => {
 	if (existingBandIdx === -1) {
 		const nextBandIndex = bands.values.length + 1;
 		console.log("ADDING", signup.name, signup.email, nextBandIndex);
-		const bandRange = `Bands!A${nextBandIndex}:B${nextBandIndex}`;
+		const bandRange = `Bands!A${nextBandIndex}:C${nextBandIndex}`;
 		await google("PUT", `values/${bandRange}?valueInputOption=USER_ENTERED`, {
 			range: bandRange,
-			values: [[signup.name, signup.email]],
+			values: [[signup.name, signup.email, signup.phone]],
 		});
 	} else {
 		console.log(`EXISTS: ${signup.name} (${signup.email})`);
