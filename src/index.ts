@@ -1,6 +1,7 @@
 import type {
   StateResponse,
   SignupBody,
+  Round,
 } from "../rigsketball-signup-worker/src/api";
 import { renderLoading, showLoading } from "./loading";
 
@@ -14,7 +15,6 @@ window.addEventListener("load", async () => {
   const loader = document.getElementById("loader") as HTMLDivElement;
   showLoading(loader, true);
   renderLoading(loader.querySelector("canvas") as HTMLCanvasElement);
-  const state = await getState();
   const nameField = document.getElementById("name") as HTMLInputElement;
   const emailField = document.getElementById("email") as HTMLInputElement;
   const datesContainer = document.getElementById("dates") as HTMLDivElement;
@@ -35,15 +35,22 @@ window.addEventListener("load", async () => {
     "[data-time]"
   ) as NodeListOf<HTMLButtonElement>;
 
+  const state = await getState();
+
   const canSubmit = () => {
     const name = nameField.value;
     const email = emailField.value;
     return name && email;
   };
+  const setSubmitted = (s: boolean) => {
+    submitted = s;
+    nameField.toggleAttribute("disabled", submitted);
+    emailField.toggleAttribute("disabled", submitted);
+  };
 
   const showError = (e: string) => {
     error.innerText = e;
-    submitted = false;
+    setSubmitted(false);
     error.classList.toggle("hidden", false);
   };
   const hideError = () => {
@@ -59,13 +66,23 @@ window.addEventListener("load", async () => {
   let selectedTime = times.item(0);
 
   const update = () => {
+    const fullTimes = new Set(
+      state.rounds
+        .filter(
+          (r) => r.date === selectedDate.dataset.date && r.band1 && r.band2
+        )
+        .map((r) => r.time)
+    );
     dates.forEach((d) => {
       d.classList.toggle("bg-red", d == selectedDate);
       d.classList.toggle("text-white", d == selectedDate);
     });
     times.forEach((t) => {
-      t.classList.toggle("bg-red", t == selectedTime);
-      t.classList.toggle("text-white", t == selectedTime);
+      const disabled = fullTimes.has(t.dataset.time!);
+      t.toggleAttribute("disabled", disabled);
+      t.classList.toggle("bg-red", !disabled && t == selectedTime);
+      t.classList.toggle("text-white", !disabled && t == selectedTime);
+      t.classList.toggle("text-gray-400", disabled);
     });
     const selectedRound = state.rounds.find(
       (r) =>
@@ -73,13 +90,6 @@ window.addEventListener("load", async () => {
         r.time == selectedTime.dataset.time
     )!;
     if (!selectedRound) {
-      console.log(
-        state.rounds,
-        selectedDate,
-        selectedTime,
-        selectedDate.dataset.date,
-        selectedTime.dataset.time
-      );
       alert("This page isn't working, let us know or try another browser!");
       throw new Error("Couldn't find selected round");
     }
@@ -144,7 +154,7 @@ window.addEventListener("load", async () => {
     if (submitted) {
       return;
     }
-    submitted = true;
+    setSubmitted(true);
     update();
     if (!canSubmit()) {
       return;
