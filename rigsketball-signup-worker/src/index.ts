@@ -1,5 +1,4 @@
 import { handleCors } from "./cors";
-import { error, json } from "itty-router";
 import apiRouter from "./api";
 
 export default {
