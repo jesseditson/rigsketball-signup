@@ -19515,6 +19515,7 @@ window.addEventListener("load", async () => {
   const signupButton = document.getElementById("signup");
   const error = document.getElementById("error");
   const success = document.getElementById("success");
+  const full = document.getElementById("full");
   const secondRoundTime = document.getElementById(
     "second-round-time"
   );
@@ -19561,21 +19562,34 @@ window.addEventListener("load", async () => {
     signupButton.classList.toggle("hidden", true);
   };
   let firstAvail = state.rounds.find((r) => !r.band1 || !r.band2);
-  let selectedDate = Array.from(dates).find(
-    (d) => d.dataset.date === firstAvail?.date
-  );
-  let selectedTime = Array.from(times).find(
-    (t) => t.dataset.time === firstAvail?.time
-  );
-  if (!selectedDate || !selectedTime) {
+  full.classList.toggle("hidden", !!firstAvail);
+  document.querySelectorAll(".hide-when-full").forEach((e) => e.classList.toggle("hidden", !firstAvail));
+  if (!firstAvail) {
     return;
   }
+  let selectedDate;
+  let selectedTime;
+  dates.forEach((d) => {
+    if (d.dataset.date === firstAvail.date) {
+      selectedDate = d;
+    }
+  });
+  times.forEach((t, idx) => {
+    if (t.dataset.time === firstAvail.time) {
+      selectedTime = t;
+    }
+    const time = state.rounds[idx].time;
+    t.dataset.time = time;
+    t.innerText = time;
+  });
   const update = () => {
     const fullTimes = new Set(
       state.rounds.filter(
         (r) => r.date === selectedDate.dataset.date && r.band1 && r.band2
       ).map((r) => r.time)
     );
+    console.log(state.rounds);
+    console.log(fullTimes);
     dates.forEach((d) => {
       d.classList.toggle("bg-red", d == selectedDate);
       d.classList.toggle("text-white", d == selectedDate);
@@ -19591,8 +19605,10 @@ window.addEventListener("load", async () => {
       (r) => r.date == selectedDate.dataset.date && r.time == selectedTime.dataset.time
     );
     if (!selectedRound) {
-      alert("This page isn't working, let us know or try another browser!");
-      throw new Error("Couldn't find selected round");
+      alert(
+        "Couldn't find selected round. Something might be wrong with this page..."
+      );
+      selectedRound = firstAvail;
     }
     const round2 = selectedRound.next;
     console.log("ROUND 2:", round2);
