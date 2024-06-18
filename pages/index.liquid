@@ -9,23 +9,26 @@
     Rigsketball 2024 Signup
   </h1>
   <div class="grid grid-cols-3 gap-6">
-    <h2 class="flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">BAND NAME</h2>
+    <div id="full" class="hidden bg-yellow col-span-3">
+      <div class="bg-red text-white flex items-center justify-center text-2xl col-span-3 p-8">WE'RE ALL FULL UP!</div>
+    </div>
+    <h2 class="hide-when-full flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">BAND NAME</h2>
     <input
       id="name"
       type="text"
-      class="p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
+      class="hide-when-full p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
       placeholder="Disturbed Earth" />
-    <h2 class="flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">EMAIL ADDRESS</h2>
+    <h2 class="hide-when-full flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">EMAIL ADDRESS</h2>
     <input
       id="email"
       type="email"
-      class="p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
+      class="hide-when-full p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
       placeholder="hello@rigsketball.com" />
-    <h2 class="flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">PHONE NUMBER</h2>
+    <h2 class="hide-when-full flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">PHONE NUMBER</h2>
     <input
       id="phone"
       type="phone"
-      class="p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
+      class="hide-when-full p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
       placeholder="503-867-5309" />
     <h2 class="p-2 bg-blue text-white flex items-center justify-center text-2xl col-span-3">FIRST ROUND DATE AND TIME</h2>
     <div id="dates" class="flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
