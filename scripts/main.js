@@ -19560,8 +19560,16 @@ window.addEventListener("load", async () => {
     success.classList.toggle("hidden", false);
     signupButton.classList.toggle("hidden", true);
   };
-  let selectedDate = dates.item(0);
-  let selectedTime = times.item(0);
+  let firstAvail = state.rounds.find((r) => !r.band1 || !r.band2);
+  let selectedDate = Array.from(dates).find(
+    (d) => d.dataset.date === firstAvail?.date
+  );
+  let selectedTime = Array.from(times).find(
+    (t) => t.dataset.time === firstAvail?.time
+  );
+  if (!selectedDate || !selectedTime) {
+    return;
+  }
   const update = () => {
     const fullTimes = new Set(
       state.rounds.filter(
@@ -19579,7 +19587,7 @@ window.addEventListener("load", async () => {
       t.classList.toggle("text-white", !disabled2 && t == selectedTime);
       t.classList.toggle("text-gray-400", disabled2);
     });
-    const selectedRound = state.rounds.find(
+    let selectedRound = state.rounds.find(
       (r) => r.date == selectedDate.dataset.date && r.time == selectedTime.dataset.time
     );
     if (!selectedRound) {
