@@ -72,14 +72,26 @@ window.addEventListener("load", async () => {
     signupButton.classList.toggle("hidden", true);
   };
 
-  let selectedDate = dates.item(0);
-  let selectedTime = times.item(0);
+  let firstAvail = state.rounds.find((r) => !r.band1 || !r.band2);
+  // TODO: if !firstAvail show "full"
+
+  let selectedDate = Array.from(dates).find(
+    (d) => d.dataset.date === firstAvail?.date
+  );
+  let selectedTime = Array.from(times).find(
+    (t) => t.dataset.time === firstAvail?.time
+  );
+
+  if (!selectedDate || !selectedTime) {
+    // SHOW FULL
+    return;
+  }
 
   const update = () => {
     const fullTimes = new Set(
       state.rounds
         .filter(
-          (r) => r.date === selectedDate.dataset.date && r.band1 && r.band2
+          (r) => r.date === selectedDate!.dataset.date && r.band1 && r.band2
         )
         .map((r) => r.time)
     );
@@ -94,10 +106,10 @@ window.addEventListener("load", async () => {
       t.classList.toggle("text-white", !disabled && t == selectedTime);
       t.classList.toggle("text-gray-400", disabled);
     });
-    const selectedRound = state.rounds.find(
+    let selectedRound = state.rounds.find(
       (r) =>
-        r.date == selectedDate.dataset.date &&
-        r.time == selectedTime.dataset.time
+        r.date == selectedDate!.dataset.date &&
+        r.time == selectedTime!.dataset.time
     )!;
     if (!selectedRound) {
       alert("This page isn't working, let us know or try another browser!");
@@ -182,8 +194,8 @@ window.addEventListener("load", async () => {
       name: nameField.value,
       email: emailField.value,
       phone: phoneNumber()!,
-      date: selectedDate.dataset.date!,
-      time: selectedTime.dataset.time!,
+      date: selectedDate!.dataset.date!,
+      time: selectedTime!.dataset.time!,
     };
     try {
       const r = await fetch(API_URL + "/signup", {

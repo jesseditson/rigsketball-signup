@@ -15,6 +15,7 @@
     "watch:site": "bin/archival run",
     "watch:js": "./build-js.mjs --dev",
     "watch:css": "npm run tailwind -- --watch",
+    "watch:api": "npm run dev --prefix rigsketball-signup-worker",
     "build:site": "bin/archival build",
     "build:js": "./build-js.mjs",
     "build:css": "npm run tailwind -- --minify",

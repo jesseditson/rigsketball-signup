@@ -13,7 +13,7 @@ const ctx = await esbuild.context({
   define: {
     DEV: dev ? "true" : "false",
     API_URL: dev
-      ? `"http://localhost:8787"`
+      ? `"http://localhost:2020"`
       : `"https://rigsketball-signup-worker.jesse-694.workers.dev"`,
   },
   format: "esm",
