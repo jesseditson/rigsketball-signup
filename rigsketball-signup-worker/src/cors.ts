@@ -1,4 +1,8 @@
-const allowedOrigins = new Set(["https://rigsketball.onarchival.dev"]);
+const allowedOrigins = new Set([
+  "https://rigsketball.onarchival.dev",
+  "https://rigsketball.com",
+  "https://rig-sketball.squarespace.com",
+]);
 
 export const handleCors = (
   request: Request,
