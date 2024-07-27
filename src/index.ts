@@ -79,17 +79,18 @@ window.addEventListener("load", async () => {
     .querySelectorAll(".hide-when-full")
     .forEach((e) => e.classList.toggle("hidden", !firstAvail));
   if (!firstAvail) {
+    showLoading(loader, false);
     return;
   }
-  let selectedDate: HTMLButtonElement;
-  let selectedTime: HTMLButtonElement;
+  let selectedDate: HTMLButtonElement | undefined;
+  let selectedTime: HTMLButtonElement | undefined;
   dates.forEach((d) => {
-    if (d.dataset.date === firstAvail.date) {
+    if (d.dataset.date === firstAvail?.date) {
       selectedDate = d;
     }
   });
   times.forEach((t, idx) => {
-    if (t.dataset.time === firstAvail.time) {
+    if (t.dataset.time === firstAvail?.time) {
       selectedTime = t;
     }
     const time = state.rounds[idx].time;
@@ -105,8 +106,6 @@ window.addEventListener("load", async () => {
         )
         .map((r) => r.time)
     );
-    console.log(state.rounds);
-    console.log(fullTimes);
     dates.forEach((d) => {
       d.classList.toggle("bg-red", d == selectedDate);
       d.classList.toggle("text-white", d == selectedDate);
