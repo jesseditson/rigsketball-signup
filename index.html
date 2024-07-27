@@ -1,0 +1,113 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Rigsketball Signup</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="Rigsketball Signup">
+    <meta property="og:type" content="website">
+    <!-- <meta property="og:url" content=""> -->
+    <!-- <meta property="og:image" content=""> -->
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/apple-touch-icon.png">
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/favicon-32x32.png">
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link
+      rel="mask-icon"
+      href="/safari-pinned-tab.svg"
+      color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <link rel="stylesheet" href="https://use.typekit.net/tas4azr.css">
+    <link rel="stylesheet" href="/style.css">
+
+    <meta name="theme-color" content="#fafafa">
+  </head>
+
+  <body class="font-sans bg-blue p-5 pt-10 flex justify-center w-full">
+    
+
+<div class="py-10 px-4 lg:px-10 relative flex flex-col max-w-screen-md gap-6 justify-center bg-yellow text-blue ring-2 ring-red">
+  <div id="loader" class="absolute size-full top-0 left-0 transition-opacity flex justify-center opacity-0 pointer-events-none">
+    <h1 class="absolute top-20 z-10 text-yellow text-2xl bold">Get Ready for Fun...</h1>
+    <canvas class="absolute size-full top-0"></canvas>
+  </div>
+  <h1 class="text-3xl font-bold">
+    Rigsketball 2024 Signup
+  </h1>
+  <div class="grid grid-cols-3 gap-6">
+    <h2 class="flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">BAND NAME</h2>
+    <input
+      id="name"
+      type="text"
+      incremental="incremental"
+      class="p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
+      placeholder="Disturbed Earth" />
+    <h2 class="flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">EMAIL ADDRESS</h2>
+    <input
+      id="email"
+      type="email"
+      incremental="incremental"
+      class="p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
+      placeholder="hello@rigsketball.com" />
+    <h2 class="flex items-center md:justify-end text-2xl col-span-3 md:col-span-1">PHONE NUMBER</h2>
+    <input
+      id="phone"
+      type="phone"
+      incremental="incremental"
+      class="p-2 text-2xl col-span-3 md:col-span-2 ring-2 ring-red flex-1"
+      placeholder="503-867-5309" />
+    <div id="full" class="hidden bg-yellow col-span-3">
+      <div class="bg-red text-white flex items-center justify-center text-2xl col-span-3 p-8">Rigsketball 2024 is all full up! Never fear, sign up for the wait-list and we will contact you when someone drops out.</div>
+    </div>
+    <h2 class="hide-when-full p-2 bg-blue text-white flex items-center justify-center text-2xl col-span-3">FIRST ROUND DATE AND TIME</h2>
+    <div id="dates" class="hide-when-full flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <button data-date="Aug 8" class="bg-red text-white rounded-xl px-5 py-2">Aug 8th</button>
+      <button data-date="Aug 9" class="rounded-xl px-5 py-2">Aug 9th</button>
+    </div>
+    <div id="times" class="hide-when-full flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <button data-time="4:20 PM" class="bg-red text-white text-gray-400 rounded-xl px-5 py-2">4:20 PM</button>
+      <button data-time="5:00 PM" class="rounded-xl px-5 py-2">5:00 PM</button>
+      <button data-time="5:40 PM" class="rounded-xl px-5 py-2">5:40 PM</button>
+      <button data-time="6:20 PM" class="rounded-xl px-5 py-2">6:20 PM</button>
+      <button data-time="7:00 PM" class="rounded-xl px-5 py-2">7:00 PM</button>
+      <button data-time="7:40 PM" class="rounded-xl px-5 py-2">7:40 PM</button>
+    </div>
+    <h2 class="hide-when-full p-2 bg-blue text-white flex items-center justify-center text-2xl col-span-3">SECOND ROUND DATE AND TIME</h2>
+    <div class="hide-when-full flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <span id="second-round" class="rounded-xl px-5 py-2">Aug 10th
+        <span id="second-round-time">3:40 PM</span>
+      </span>
+    </div>
+    <h2 class="hide-when-full p-2 bg-blue text-white flex items-center justify-center text-2xl col-span-3">THIRD ROUND DATE AND TIME</h2>
+    <div class="hide-when-full flex items-center justify-center text-2xl col-span-3 gap-4 flex-wrap">
+      <span id="third-round" class="rounded-xl px-5 py-2">Aug 11th
+        <span id="third-round-time">4:20 PM</span>
+      </span>
+    </div>
+    <div id="error" class="p-2 text-2xl text-red col-span-3 hidden"></div>
+    <div id="success" class="p-2 text-2xl text-blue col-span-3 hidden"></div>
+    <button id="signup" class="disabled opacity-10 bg-red text-white flex items-center justify-center text-2xl col-span-3 p-8 rounded-xl hover:shadow-2xl active:shadow-none">LOOKS GREAT SIGN ME UP</button>
+  </div>
+</div>
+
+    <script src="/scripts/main.js" type="module"></script>
+  </body>
+
+</html>
