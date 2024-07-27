@@ -78,62 +78,61 @@ window.addEventListener("load", async () => {
   document
     .querySelectorAll(".hide-when-full")
     .forEach((e) => e.classList.toggle("hidden", !firstAvail));
-  if (!firstAvail) {
-    showLoading(loader, false);
-    return;
-  }
   let selectedDate: HTMLButtonElement | undefined;
   let selectedTime: HTMLButtonElement | undefined;
-  dates.forEach((d) => {
-    if (d.dataset.date === firstAvail?.date) {
-      selectedDate = d;
-    }
-  });
-  times.forEach((t, idx) => {
-    if (t.dataset.time === firstAvail?.time) {
-      selectedTime = t;
-    }
-    const time = state.rounds[idx].time;
-    t.dataset.time = time;
-    t.innerText = time;
-  });
-
-  const update = () => {
-    const fullTimes = new Set(
-      state.rounds
-        .filter(
-          (r) => r.date === selectedDate!.dataset.date && r.band1 && r.band2
-        )
-        .map((r) => r.time)
-    );
+  if (firstAvail) {
     dates.forEach((d) => {
-      d.classList.toggle("bg-red", d == selectedDate);
-      d.classList.toggle("text-white", d == selectedDate);
+      if (d.dataset.date === firstAvail?.date) {
+        selectedDate = d;
+      }
     });
-    times.forEach((t) => {
-      const disabled = fullTimes.has(t.dataset.time!);
-      t.toggleAttribute("disabled", disabled);
-      t.classList.toggle("bg-red", !disabled && t == selectedTime);
-      t.classList.toggle("text-white", !disabled && t == selectedTime);
-      t.classList.toggle("text-gray-400", disabled);
+    times.forEach((t, idx) => {
+      if (t.dataset.time === firstAvail?.time) {
+        selectedTime = t;
+      }
+      const time = state.rounds[idx].time;
+      t.dataset.time = time;
+      t.innerText = time;
     });
-    let selectedRound = state.rounds.find(
-      (r) =>
-        r.date == selectedDate!.dataset.date &&
-        r.time == selectedTime!.dataset.time
-    )!;
-    if (!selectedRound) {
-      alert(
-        "Couldn't find selected round. Something might be wrong with this page..."
+  }
+  const update = () => {
+    if (selectedDate && selectedTime && firstAvail) {
+      const fullTimes = new Set(
+        state.rounds
+          .filter(
+            (r) => r.date === selectedDate?.dataset.date && r.band1 && r.band2
+          )
+          .map((r) => r.time)
       );
-      selectedRound = firstAvail;
+      dates.forEach((d) => {
+        d.classList.toggle("bg-red", d == selectedDate);
+        d.classList.toggle("text-white", d == selectedDate);
+      });
+      times.forEach((t) => {
+        const disabled = fullTimes.has(t.dataset.time!);
+        t.toggleAttribute("disabled", disabled);
+        t.classList.toggle("bg-red", !disabled && t == selectedTime);
+        t.classList.toggle("text-white", !disabled && t == selectedTime);
+        t.classList.toggle("text-gray-400", disabled);
+      });
+      let selectedRound = state.rounds.find(
+        (r) =>
+          r.date == selectedDate!.dataset.date &&
+          r.time == selectedTime!.dataset.time
+      )!;
+      if (!selectedRound) {
+        alert(
+          "Couldn't find selected round. Something might be wrong with this page..."
+        );
+        selectedRound = firstAvail;
+      }
+      const round2 = selectedRound.next;
+      console.log("ROUND 2:", round2);
+      secondRoundTime.innerText = round2!.time;
+      const round3 = round2!.next;
+      console.log("ROUND 3:", round2);
+      thirdRoundTime.innerText = round3!.time;
     }
-    const round2 = selectedRound.next;
-    console.log("ROUND 2:", round2);
-    secondRoundTime.innerText = round2!.time;
-    const round3 = round2!.next;
-    console.log("ROUND 3:", round2);
-    thirdRoundTime.innerText = round3!.time;
     const disabled = !canSubmit();
     signupButton.classList.toggle("disabled", disabled);
     signupButton.classList.toggle("opacity-10", disabled);
@@ -144,6 +143,7 @@ window.addEventListener("load", async () => {
     if (submitted) {
       return;
     }
+
     nameField.classList.toggle("ring-2", !nameField.value);
     update();
   });
@@ -207,8 +207,8 @@ window.addEventListener("load", async () => {
       name: nameField.value,
       email: emailField.value,
       phone: phoneNumber()!,
-      date: selectedDate!.dataset.date!,
-      time: selectedTime!.dataset.time!,
+      date: selectedDate?.dataset.date!,
+      time: selectedTime?.dataset.time!,
     };
     try {
       const r = await fetch(API_URL + "/signup", {
@@ -221,7 +221,9 @@ window.addEventListener("load", async () => {
         showError(await r.text());
       } else {
         showSuccess(
-          "You're in! Copy these dates down and Bim will reach out with more details or any questions!"
+          firstAvail
+            ? "You're in! Copy these dates down and Bim will reach out with more details or any questions!"
+            : "You're in! Bim will reach out when someone drops out or if he has any questions!"
         );
       }
     } catch (e) {
